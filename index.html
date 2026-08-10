@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>일일 원두 재고 관리</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div><h1>일일 원두 재고 관리</h1><p>1~8파트 통합 조회 · 일일 입고/사용량 등록</p></div><button id="refresh">새로고침</button></header>
+<main>
+<section class="tabs" id="tabs"></section>
+<section class="cards">
+<div><span>선택 파트</span><b id="partName">1파트</b></div>
+<div><span>매장 수</span><b id="storeCount">-</b></div>
+<div><span>기준일</span><b id="dateLabel">-</b></div>
+<div><span>연결 상태</span><b id="connection">설정 필요</b></div>
+</section>
+<section class="toolbar">
+<input id="search" placeholder="매장명 검색">
+<input id="date" type="date">
+<button id="load">조회</button>
+</section>
+<section class="panel">
+<table><thead><tr><th>매장</th><th>평일 평균매출</th><th>주말 평균매출</th><th>전일재고</th><th>입고</th><th>사용</th><th>잔여재고</th><th>저장</th></tr></thead>
+<tbody id="body"><tr><td colspan="8" class="empty">Apps Script URL을 config.js에 입력하면 현재 Google Sheet 데이터가 표시됩니다.</td></tr></tbody></table>
+</section>
+<p class="note">원본 Google Sheet의 1~8파트 탭을 그대로 사용합니다. 웹에서 입력한 입고/사용 값은 Apps Script를 통해 해당 날짜 열에 저장됩니다.</p>
+</main>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>
