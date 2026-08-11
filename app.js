@@ -6,5 +6,43 @@ async function api(params={},method="GET"){if(!API_URL)throw new Error("config.j
 async function loadData(){const date=$("#date").value;$("#dateLabel").textContent=date;$("#body").innerHTML='<tr><td colspan="8" class="empty">불러오는 중...</td></tr>';try{const data=await api({part:currentPart,date});$("#connection").textContent="연결됨";$("#storeCount").textContent=data.rows.length;render(data.rows)}catch(e){$("#connection").textContent="연결 필요";$("#body").innerHTML=`<tr><td colspan="8" class="empty">${e.message}</td></tr>`}}
 function render(rows){const q=$("#search").value.trim().toLowerCase();const list=rows.filter(r=>r.store.toLowerCase().includes(q));$("#body").innerHTML=list.map((r,i)=>`<tr data-store="${esc(r.store)}"><td>${esc(r.store)}</td><td>${esc(r.weekday)}</td><td>${esc(r.weekend)}</td><td>${esc(r.prev)}</td><td><input class="qty incoming" type="number" min="0" value="${esc(r.incoming)}"></td><td><input class="qty usage" type="number" min="0" value="${esc(r.usage)}"></td><td class="remain">${esc(r.remain)}</td><td><button class="save" onclick="saveRow(this)">저장</button></td></tr>`).join("")||'<tr><td colspan="8" class="empty">검색 결과가 없습니다.</td></tr>'}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-async function saveRow(btn){const tr=btn.closest("tr");btn.disabled=true;btn.textContent="저장중";try{const out=await api({action:"save",part:currentPart,date:$("#date").value,store:tr.dataset.store,incoming:tr.querySelector(".incoming").value,usage:tr.querySelector(".usage").value},"POST");tr.querySelector(".remain").textContent=out.remain;btn.textContent="완료";setTimeout(()=>btn.textContent="저장",1000)}catch(e){alert(e.message);btn.textContent="저장"}finally{btn.disabled=false}}
-$("#date").value=today();$("#load").onclick=loadData;$("#refresh").onclick=loadData;$("#search").oninput=loadData;makeTabs();if(API_URL)loadData();
+async function saveRow(btn) {
+  const tr = btn.closest("tr");
+
+  btn.disabled = true;
+  btn.textContent = "저장중...";
+
+  try {
+    const out = await api({
+      action: "save",
+      part: currentPart,
+      date: $("#date").value,
+      store: tr.dataset.store,
+      incoming: tr.querySelector(".incoming").value,
+      usage: tr.querySelector(".usage").value
+    }, "POST");
+
+    if (out.ok === false) {
+      throw new Error(out.error || "저장에 실패했습니다.");
+    }
+
+    tr.querySelector(".remain").textContent = out.remain;
+
+    btn.textContent = "✓ 저장완료";
+
+    setTimeout(() => {
+      btn.textContent = "저장";
+    }, 2500);
+
+  } catch (e) {
+    btn.textContent = "저장 실패";
+    alert(e.message);
+
+    setTimeout(() => {
+      btn.textContent = "저장";
+    }, 2500);
+
+  } finally {
+    btn.disabled = false;
+  }
+}$("#date").value=today();$("#load").onclick=loadData;$("#refresh").onclick=loadData;$("#search").oninput=loadData;makeTabs();if(API_URL)loadData();
