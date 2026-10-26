@@ -1,30 +1,7 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>일일 원두 재고 관리</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>일일 원두 재고 관리</title><link rel="stylesheet" href="styles.css"></head><body>
 <header><div><h1>일일 원두 재고 관리</h1><p>1~8파트 통합 조회 · 일일 입고/사용량 등록</p></div><button id="refresh">새로고침</button></header>
-<main>
-<section class="tabs" id="tabs"></section>
-<section class="cards">
-<div><span>선택 파트</span><b id="partName">1파트</b></div>
-<div><span>매장 수</span><b id="storeCount">-</b></div>
-<div><span>기준일</span><b id="dateLabel">-</b></div>
-<div><span>연결 상태</span><b id="connection">설정 필요</b></div>
-</section>
-<section class="toolbar">
-<input id="search" placeholder="매장명 검색">
-<input id="date" type="date">
-<button id="load">조회</button>
-</section>
-<section class="panel">
-<table><thead><tr><th>매장</th><th>평일 평균매출</th><th>주말 평균매출</th><th>전일재고</th><th>입고</th><th>사용</th><th>잔여재고</th><th>저장</th></tr></thead>
-<tbody id="body"><tr><td colspan="8" class="empty">Apps Script URL을 config.js에 입력하면 현재 Google Sheet 데이터가 표시됩니다.</td></tr></tbody></table>
-</section>
-<p class="note">원본 Google Sheet의 1~8파트 탭을 그대로 사용합니다. 웹에서 입력한 입고/사용 값은 Apps Script를 통해 해당 날짜 열에 저장됩니다.</p>
-</main>
-<script src="config.js"></script><script src="app.js"></script>
-</body></html>
+<main><nav id="parts"></nav><section class="cards"><article>선택 파트<strong id="part">1파트</strong></article><article>매장 수<strong id="count">-</strong></article><article>기준일<strong id="day">-</strong></article><article>연결 상태<strong id="connection">확인 중</strong></article></section>
+<section class="panel"><div class="tools"><input id="search" placeholder="매장명 검색"><input id="date" type="date"><button id="lookup">조회</button></div>
+<div class="scroll"><table><thead><tr><th>매장</th><th>평일 평균매출</th><th>평일 평균 사용량</th><th>주말 평균 사용량</th><th>주말 평균매출</th><th>전일재고</th><th>입고</th><th>사용</th><th>잔여재고</th><th>저장</th></tr></thead><tbody id="rows"><tr><td colspan="10">조회 중...</td></tr></tbody></table></div></section>
+<p class="note">평균 사용량은 선택 월의 실제 입력된 사용량을 평일(월~금)과 주말(토·일)로 나누어 계산합니다. 미입력은 제외하고 입력된 0은 포함합니다.</p>
+</main><div id="toast" role="status"></div><script src="config.js"></script><script src="app.js"></script></body></html>
